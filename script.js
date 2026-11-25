@@ -62,16 +62,49 @@ const musicStatus = document.getElementById("musicStatus");
 
 music.volume = 0.5;
 
-musicButton.addEventListener("click", async () => {
+let userPaused = false;
+
+async function startAutoplay() {
+    if (userPaused) return;
+    try {
+        music.muted = false;
+        await music.play();
+        musicStatus.textContent = "Now playing ♪";
+    } catch (err) {
+        // Browsers block unmuted audio until first user gesture; unlock on first interaction anywhere
+        musicStatus.textContent = "Click anywhere to start ♪";
+        const unlockAudio = async () => {
+            if (userPaused) return;
+            try {
+                music.muted = false;
+                await music.play();
+                musicStatus.textContent = "Now playing ♪";
+            } catch (e) {
+                console.error(e);
+            }
+        };
+        ["click", "pointerdown", "keydown", "touchstart"].forEach((evt) => {
+            document.addEventListener(evt, unlockAudio, { once: true });
+        });
+    }
+}
+
+window.addEventListener("DOMContentLoaded", startAutoplay);
+
+musicButton.addEventListener("click", async (e) => {
+    e.stopPropagation();
     try {
         if (music.paused) {
+            userPaused = false;
             music.muted = false;
             await music.play();
             musicStatus.textContent = "Now playing ♪";
         } else if (music.muted) {
+            userPaused = false;
             music.muted = false;
             musicStatus.textContent = "Now playing ♪";
         } else {
+            userPaused = true;
             music.pause();
             musicStatus.textContent = "Music paused";
         }
@@ -83,6 +116,7 @@ musicButton.addEventListener("click", async () => {
 
 music.addEventListener("play", () => {
     vinyl.classList.add("playing");
+    musicStatus.textContent = "Now playing ♪";
 });
 
 music.addEventListener("pause", () => {
@@ -108,4 +142,73 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll(".reveal").forEach((element) => {
     observer.observe(element);
+});
+
+
+// INTEREST GALLERY MODAL
+
+const galleryData = {
+    gaming: {
+        title: "Gaming Moments.",
+        images: [
+            "images/gaming1.jpg",
+            "images/gaming2.jpg"
+        ]
+    },
+    coding: {
+        title: "Coding Projects.",
+        images: [
+            "images/coding1.jpg",
+            "images/coding2.jpg"
+        ]
+    },
+    socializing: {
+        title: "Socializing & Friends.",
+        images: [
+            "images/social1.jpg",
+            "images/social2.jpg"
+        ]
+    },
+    traveling: {
+        title: "Traveling Adventures.",
+        images: [
+            "images/travel1.jpg",
+            "images/travel2.jpg"
+        ]
+    }
+};
+
+function openGallery(category) {
+    const modal = document.getElementById("galleryModal");
+    const title = document.getElementById("modalTitle");
+    const imageContainer = document.getElementById("modalImages");
+
+    const data = galleryData[category];
+    title.textContent = data.title;
+    imageContainer.innerHTML = "";
+
+    data.images.forEach((imgSrc) => {
+        const img = document.createElement("img");
+        img.src = imgSrc;
+        img.alt = data.title;
+        imageContainer.appendChild(img);
+    });
+
+    modal.style.display = "flex";
+}
+
+function forceClose() {
+    document.getElementById("galleryModal").style.display = "none";
+}
+
+function closeModal(event) {
+    if (event.target.id === "galleryModal") {
+        forceClose();
+    }
+}
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        forceClose();
+    }
 });

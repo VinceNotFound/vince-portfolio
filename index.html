@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -153,45 +152,67 @@
 
         <div class="hobby-container">
 
-            <div class="hobby-card">
-                <div class="hobby-icon">🎮</div>
-                <h3>Gaming</h3>
-                <p>
-                    Playing different games, exploring virtual worlds,
-                    and challenging myself.
-                </p>
+            <div class="hobby-card" onclick="openGallery('gaming')">
+                <div>
+                    <div class="hobby-icon">🎮</div>
+                    <h3>Gaming</h3>
+                    <p>
+                        Playing different games, exploring virtual worlds,
+                        and challenging myself.
+                    </p>
+                </div>
+                <span class="view-photos">View Photos ↗</span>
             </div>
 
-            <div class="hobby-card">
-                <div class="hobby-icon">💻</div>
-                <h3>Coding</h3>
-                <p>
-                    Learning programming, solving problems,
-                    and creating useful projects.
-                </p>
+            <div class="hobby-card" onclick="openGallery('coding')">
+                <div>
+                    <div class="hobby-icon">💻</div>
+                    <h3>Coding</h3>
+                    <p>
+                        Learning programming, solving problems,
+                        and creating useful projects.
+                    </p>
+                </div>
+                <span class="view-photos">View Photos ↗</span>
             </div>
 
-            <div class="hobby-card">
-                <div class="hobby-icon">🤝</div>
-                <h3>Socializing</h3>
-                <p>
-                    Meeting new people, building friendships,
-                    and sharing experiences.
-                </p>
+            <div class="hobby-card" onclick="openGallery('socializing')">
+                <div>
+                    <div class="hobby-icon">🤝</div>
+                    <h3>Socializing</h3>
+                    <p>
+                        Meeting new people, building friendships,
+                        and sharing experiences.
+                    </p>
+                </div>
+                <span class="view-photos">View Photos ↗</span>
             </div>
 
-            <div class="hobby-card">
-                <div class="hobby-icon">✈️</div>
-                <h3>Traveling</h3>
-                <p>
-                    Discovering new places and making
-                    unforgettable memories.
-                </p>
+            <div class="hobby-card" onclick="openGallery('traveling')">
+                <div>
+                    <div class="hobby-icon">✈️</div>
+                    <h3>Traveling</h3>
+                    <p>
+                        Discovering new places and making
+                        unforgettable memories.
+                    </p>
+                </div>
+                <span class="view-photos">View Photos ↗</span>
             </div>
 
         </div>
 
     </section>
+
+    <!-- GALLERY MODAL -->
+    <div id="galleryModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <span class="close-btn" onclick="forceClose()">&times;</span>
+            <p class="section-label modal-label">INTEREST GALLERY</p>
+            <h2 id="modalTitle">Category Title</h2>
+            <div id="modalImages" class="modal-gallery"></div>
+        </div>
+    </div>
 
     <!-- CONTACT -->
     <section class="contact reveal" id="contact">
@@ -225,13 +246,12 @@
     <div class="music-player">
 
         <audio
-    id="backgroundMusic"
-    src="music.mp3"
-    autoplay
-    muted
-    loop
-    preload="auto">
-</audio>
+            id="backgroundMusic"
+            src="music.mp3"
+            autoplay
+            loop
+            preload="auto">
+        </audio>
 
         <button id="musicButton" aria-label="Play background music">
 

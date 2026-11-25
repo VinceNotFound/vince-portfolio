@@ -650,3 +650,118 @@ footer p {
         transition-duration: 0.01ms !important;
     }
 }
+
+
+/* CLICKABLE HOBBY CARDS & GALLERY MODAL */
+
+.hobby-card {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.view-photos {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #777;
+    transition: 0.3s;
+}
+
+.hobby-card:hover .view-photos {
+    color: #fff;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 300;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #141414;
+    border: 1px solid #444;
+    padding: 35px;
+    max-width: 860px;
+    width: 100%;
+    color: #f5f5f5;
+    position: relative;
+    box-shadow: 0 25px 70px #000;
+    animation: modalFadeIn 0.25s ease;
+}
+
+.modal-label {
+    margin-bottom: 8px;
+}
+
+.modal-content h2 {
+    font-size: 28px;
+    margin-bottom: 24px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    font-size: 30px;
+    color: #888;
+    cursor: pointer;
+    line-height: 1;
+    transition: 0.2s;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+.modal-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+}
+
+.modal-gallery img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border: 1px solid #333;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.modal-gallery img:hover {
+    transform: scale(1.02);
+    border-color: #888;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 550px) {
+    .modal-content {
+        padding: 25px 20px;
+    }
+
+    .modal-gallery img {
+        height: 200px;
+    }
+}
