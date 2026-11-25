@@ -1,5 +1,4 @@
 
-/* GENERAL SETTINGS */
 * {
     margin: 0;
     padding: 0;
@@ -8,28 +7,34 @@
 }
 
 body {
-    background-color: #080808;
+    background: #080808;
     color: #f5f5f5;
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.7;
+    overflow-x: hidden;
 }
 
 /* HEADER */
+
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 25px 10%;
-    background-color: #080808;
+    background: rgba(8,8,8,0.95);
     border-bottom: 1px solid #252525;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
 }
 
 .logo {
     color: white;
+    text-decoration: none;
     font-size: 25px;
     font-weight: bold;
     letter-spacing: 3px;
-    text-decoration: none;
 }
 
 .logo span {
@@ -42,7 +47,7 @@ nav {
 }
 
 nav a {
-    color: #aaa;
+    color: #999;
     text-decoration: none;
     font-size: 14px;
     transition: 0.3s;
@@ -52,26 +57,25 @@ nav a:hover {
     color: white;
 }
 
-/* HERO SECTION */
+/* HERO */
+
 .hero {
-    min-height: 85vh;
+    min-height: 88vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 70px 12%;
-    gap: 50px;
-    background: linear-gradient(
-        110deg,
-        #080808,
-        #171717
-    );
+    gap: 40px;
+    background:
+        radial-gradient(ellipse at 80% 50%, #292929 0%, transparent 55%),
+        #080808;
 }
 
 .hero-text {
     max-width: 550px;
 }
 
-.subtitle,
+.eyebrow,
 .section-label {
     color: #888;
     font-size: 12px;
@@ -87,6 +91,7 @@ nav a:hover {
 }
 
 .hero h1 span {
+    display: block;
     color: #888;
 }
 
@@ -100,13 +105,12 @@ nav a:hover {
 .description {
     color: #999;
     margin-bottom: 30px;
-    max-width: 450px;
 }
 
 .button {
     display: inline-block;
+    background: white;
     color: black;
-    background-color: white;
     padding: 12px 28px;
     text-decoration: none;
     font-size: 13px;
@@ -115,36 +119,200 @@ nav a:hover {
 }
 
 .button:hover {
-    background-color: #999;
+    background: #999;
+    transform: translateY(-4px);
 }
 
-/* PROFILE IMAGE */
-.hero-image {
-    width: 350px;
-    height: 470px;
+/* ID STAGE */
+
+.id-stage {
+    width: 370px;
+    height: 530px;
     flex-shrink: 0;
-    overflow: hidden;
-    border: 1px solid #444;
-    box-shadow: 15px 15px 0 #252525;
+    position: relative;
 }
 
-.hero-image img {
+.drag-hint {
+    text-align: center;
+    color: #777;
+    font-size: 10px;
+    letter-spacing: 3px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    animation: pulse 2s infinite;
+}
+
+/* DRAGGABLE CARD */
+
+
+/* DRAGGABLE ID FIX */
+
+.id-card-wrap {
+    --drag-x: 0px;
+    --drag-y: 0px;
+
+    width: 280px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(
+            calc(-50% + var(--drag-x)),
+            calc(-50% + var(--drag-y))
+        )
+        rotate(-3deg);
+
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+
+    z-index: 2;
+    transition: none;
+
+    opacity: 0;
+    animation: idAppear 1s ease 0.3s forwards;
+}
+
+.id-card-wrap.dragging {
+    cursor: grabbing;
+    transition: none;
+    z-index: 20;
+}
+
+.id-card-wrap.dragging .id-card {
+    box-shadow: 0 25px 70px #000;
+}
+
+.id-card-wrap.returning {
+    transition: transform 650ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes idAppear {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* LANYARD */
+
+.lanyard {
+    width: 100px;
+    height: 160px;
+    position: absolute;
+    top: -135px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 10px solid #777;
+    border-right: 10px solid #777;
+    border-bottom: 10px solid #555;
+    border-radius: 0 0 45px 45px;
+    z-index: -1;
+    filter: drop-shadow(2px 3px 3px #000);
+}
+
+.id-clip {
+    position: absolute;
+    width: 38px;
+    height: 25px;
+    background: linear-gradient(90deg, #555, #ccc, #555);
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
+    z-index: 3;
+}
+
+/* ID CARD */
+
+.id-card {
+    background: #171717;
+    border: 1px solid #777;
+    border-radius: 12px;
+    padding: 15px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px #000;
+    position: relative;
+}
+
+.id-header {
+    display: flex;
+    justify-content: space-between;
+    color: #aaa;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+}
+
+.id-photo {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #222;
+    border: 1px solid #555;
+}
+
+.id-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center 40%;
     filter: grayscale(100%);
-    transition: 0.5s;
+    pointer-events: none;
 }
 
-.hero-image img:hover {
-    transform: scale(1.04);
+.id-details {
+    padding: 15px 5px 5px;
 }
 
-/* ABOUT SECTION */
+.id-label {
+    color: #777;
+    font-size: 9px;
+    letter-spacing: 2px;
+}
+
+.id-details h3 {
+    font-size: 20px;
+    line-height: 1.3;
+    margin: 5px 0 12px;
+}
+
+.id-line {
+    width: 100%;
+    height: 1px;
+    background: #444;
+    margin: 12px 0;
+}
+
+.id-course {
+    color: #bbb;
+    font-size: 10px;
+    letter-spacing: 1px;
+    margin: 5px 0 18px;
+}
+
+.id-bottom {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #444;
+    padding-top: 12px;
+    color: #999;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+/* ABOUT */
+
 .about {
     padding: 100px 12%;
-    background-color: #111;
+    background: #111;
 }
 
 .about h2,
@@ -154,14 +322,14 @@ nav a:hover {
     margin-bottom: 35px;
 }
 
-.about-content {
+.about-text {
     max-width: 850px;
     color: #aaa;
     font-size: 16px;
     margin-bottom: 45px;
 }
 
-.about-content strong {
+.about-text strong {
     color: white;
 }
 
@@ -173,14 +341,20 @@ nav a:hover {
 
 .student-info div {
     padding: 20px;
-    background-color: #1c1c1c;
+    background: #1c1c1c;
     border-left: 2px solid #777;
+    transition: 0.3s;
+}
+
+.student-info div:hover {
+    background: #292929;
+    transform: translateY(-5px);
 }
 
 .student-info span {
+    color: #888;
     font-size: 11px;
     letter-spacing: 2px;
-    color: #888;
 }
 
 .student-info h3 {
@@ -188,10 +362,11 @@ nav a:hover {
     margin-top: 8px;
 }
 
-/* HOBBIES SECTION */
+/* HOBBIES */
+
 .hobbies {
     padding: 100px 12%;
-    background-color: #080808;
+    background: #080808;
 }
 
 .hobby-container {
@@ -202,15 +377,16 @@ nav a:hover {
 
 .hobby-card {
     padding: 30px 22px;
-    background-color: #171717;
+    background: #171717;
     border: 1px solid #292929;
-    transition: 0.3s;
+    transition: 0.4s;
 }
 
 .hobby-card:hover {
-    transform: translateY(-8px);
-    background-color: #222;
-    border-color: #777;
+    transform: translateY(-10px);
+    background: #222;
+    border-color: #888;
+    box-shadow: 0 10px 30px #000;
 }
 
 .hobby-icon {
@@ -228,11 +404,12 @@ nav a:hover {
     font-size: 14px;
 }
 
-/* CONTACT SECTION */
+/* CONTACT */
+
 .contact {
     padding: 100px 12%;
     text-align: center;
-    background-color: #151515;
+    background: #151515;
 }
 
 .contact p {
@@ -255,15 +432,133 @@ nav a:hover {
 }
 
 .social-links a:hover {
-    background-color: white;
+    background: white;
     color: black;
 }
 
+/* VINYL MUSIC PLAYER */
+
+.music-player {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px 12px 12px;
+    background: rgba(25,25,25,0.95);
+    border: 1px solid #444;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px #000;
+    backdrop-filter: blur(10px);
+}
+
+#musicButton {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.vinyl {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background:
+        repeating-radial-gradient(
+            circle,
+            #111 0px,
+            #333 2px,
+            #111 4px
+        );
+    border: 2px solid #666;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vinyl-center {
+    width: 15px;
+    height: 15px;
+    background: #aaa;
+    border: 4px solid #555;
+    border-radius: 50%;
+}
+
+.vinyl.playing {
+    animation: spin 3s linear infinite;
+}
+
+.music-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.music-info span {
+    color: #777;
+    font-size: 8px;
+    letter-spacing: 2px;
+}
+
+.music-info strong {
+    font-size: 11px;
+    color: white;
+}
+
+.music-info small {
+    color: #999;
+    font-size: 9px;
+}
+
+/* ANIMATIONS */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(35px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-text {
+    animation: fadeUp 1.2s ease both;
+}
+
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+@keyframes pulse {
+    50% {
+        opacity: 0.4;
+    }
+}
+
 /* FOOTER */
+
 footer {
     padding: 25px;
     text-align: center;
-    background-color: #050505;
+    background: #050505;
     border-top: 1px solid #252525;
 }
 
@@ -272,26 +567,23 @@ footer p {
     font-size: 12px;
 }
 
-/* RESPONSIVE DESIGN */
+/* RESPONSIVE */
+
 @media (max-width: 900px) {
 
     .hero {
-        flex-direction: column-reverse;
+        flex-direction: column;
         text-align: center;
+        padding-top: 70px;
     }
 
     .hero-text {
         margin: auto;
     }
 
-    .hero-image {
-        width: 280px;
-        height: 380px;
-    }
-
-    .description {
-        margin-left: auto;
-        margin-right: auto;
+    .id-stage {
+        margin-top: 100px;
+        margin-bottom: 30px;
     }
 
     .student-info {
@@ -300,10 +592,6 @@ footer p {
 
     .hobby-container {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    nav {
-        gap: 15px;
     }
 }
 
@@ -316,7 +604,7 @@ footer p {
     }
 
     nav {
-        gap: 13px;
+        gap: 15px;
         flex-wrap: wrap;
         justify-content: center;
     }
@@ -332,6 +620,11 @@ footer p {
         padding: 65px 7%;
     }
 
+    .id-stage {
+        width: 100%;
+        max-width: 370px;
+    }
+
     .hobby-container {
         grid-template-columns: 1fr;
     }
@@ -342,7 +635,18 @@ footer p {
         font-size: 30px;
     }
 
-    .social-links {
-        flex-direction: column;
+    .music-player {
+        right: 12px;
+        bottom: 12px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
     }
 }
