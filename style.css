@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -127,7 +126,7 @@ nav a:hover {
 
 .id-stage {
     width: 370px;
-    height: 530px;
+    height: 550px;
     flex-shrink: 0;
     position: relative;
 }
@@ -141,103 +140,133 @@ nav a:hover {
     bottom: 0;
     width: 100%;
     animation: pulse 2s infinite;
+    pointer-events: none;
 }
 
-/* DRAGGABLE CARD */
+/* DYNAMIC LANYARD WITH NAME DESIGN */
 
+.lanyard-strap {
+    position: absolute;
+    top: -110px;
+    left: 50%;
+    width: 28px;
+    height: 185px;
+    margin-left: -14px;
+    transform-origin: top center;
+    background: linear-gradient(90deg, #151515 0%, #2a2a2a 50%, #151515 100%);
+    border-left: 1px solid #555;
+    border-right: 1px solid #555;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
 
-/* DRAGGABLE ID FIX */
-
-.id-card-wrap {
-    --drag-x: 0px;
-    --drag-y: 0px;
-
-    width: 280px;
+.strap-pattern {
     position: absolute;
     top: 50%;
     left: 50%;
+    width: 4000px;
+    height: 28px;
+    transform: translate(-50%, -50%) rotate(90deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    transform:
-        translate(
-            calc(-50% + var(--drag-x)),
-            calc(-50% + var(--drag-y))
-        )
-        rotate(-3deg);
+.strap-pattern span {
+    font-family: monospace;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.55);
+    white-space: nowrap;
+}
+
+/* DRAGGABLE & FLIPPABLE CARD WRAPPER */
+
+.id-card-wrap {
+    width: 280px;
+    height: 415px;
+    position: absolute;
+    top: 75px;
+    left: 50%;
+    margin-left: -140px;
+    transform-origin: top center;
 
     cursor: grab;
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
 
-    z-index: 2;
-    transition: none;
+    perspective: 1200px;
+    z-index: 5;
 
     opacity: 0;
-    animation: idAppear 1s ease 0.3s forwards;
+    animation: idAppear 1s ease 0.2s forwards;
 }
 
 .id-card-wrap.dragging {
     cursor: grabbing;
-    transition: none;
-    z-index: 20;
+    z-index: 50;
 }
 
-.id-card-wrap.dragging .id-card {
-    box-shadow: 0 25px 70px #000;
-}
-
-.id-card-wrap.returning {
-    transition: transform 650ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
 @keyframes idAppear {
     from {
         opacity: 0;
     }
-
     to {
         opacity: 1;
     }
 }
 
-/* LANYARD */
-
-.lanyard {
-    width: 100px;
-    height: 160px;
-    position: absolute;
-    top: -135px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-left: 10px solid #777;
-    border-right: 10px solid #777;
-    border-bottom: 10px solid #555;
-    border-radius: 0 0 45px 45px;
-    z-index: -1;
-    filter: drop-shadow(2px 3px 3px #000);
-}
-
 .id-clip {
     position: absolute;
     width: 38px;
-    height: 25px;
+    height: 24px;
     background: linear-gradient(90deg, #555, #ccc, #555);
-    top: -9px;
+    top: -12px;
     left: 50%;
     transform: translateX(-50%);
     border-radius: 5px;
-    z-index: 3;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
 }
 
-/* ID CARD */
+/* 3D FLIPPER */
+
+.id-flipper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.id-flipper.is-flipped {
+    transform: rotateY(180deg);
+}
+
+/* ID CARD FACES */
 
 .id-card {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     background: #171717;
     border: 1px solid #777;
     border-radius: 12px;
     padding: 15px;
     overflow: hidden;
     box-shadow: 0 20px 60px #000;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.id-card-wrap.dragging .id-card {
+    box-shadow: 0 30px 80px #000;
+    border-color: #aaa;
 }
 
 .id-header {
@@ -253,7 +282,7 @@ nav a:hover {
 
 .id-photo {
     width: 100%;
-    height: 200px;
+    height: 195px;
     overflow: hidden;
     background: #222;
     border: 1px solid #555;
@@ -269,7 +298,11 @@ nav a:hover {
 }
 
 .id-details {
-    padding: 15px 5px 5px;
+    padding: 12px 5px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .id-label {
@@ -279,32 +312,83 @@ nav a:hover {
 }
 
 .id-details h3 {
-    font-size: 20px;
-    line-height: 1.3;
-    margin: 5px 0 12px;
+    font-size: 19px;
+    line-height: 1.25;
+    margin: 4px 0 8px;
 }
 
 .id-line {
     width: 100%;
     height: 1px;
     background: #444;
-    margin: 12px 0;
+    margin: 8px 0;
 }
 
 .id-course {
     color: #bbb;
     font-size: 10px;
     letter-spacing: 1px;
-    margin: 5px 0 18px;
+    margin: 4px 0 12px;
 }
 
 .id-bottom {
     display: flex;
     justify-content: space-between;
     border-top: 1px solid #444;
-    padding-top: 12px;
+    padding-top: 10px;
     color: #999;
     font-size: 9px;
+    letter-spacing: 1px;
+}
+
+/* BACK FACE STYLING */
+
+.id-back {
+    transform: rotateY(180deg);
+}
+
+.id-back-image {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    border: 1px solid #555;
+    overflow: hidden;
+    background: #111;
+}
+
+.id-back-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.id-back-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8, 8, 8, 0.92) 0%, rgba(8, 8, 8, 0.25) 55%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 14px;
+}
+
+.back-badge {
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #aaa;
+    margin-bottom: 4px;
+}
+
+.id-back-overlay h4 {
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.2;
+}
+
+.id-back-overlay p {
+    font-size: 10px;
+    color: #999;
     letter-spacing: 1px;
 }
 
@@ -527,7 +611,6 @@ nav a:hover {
     animation: fadeUp 1.2s ease both;
 }
 
-
 @keyframes spin {
     to {
         transform: rotate(360deg);
@@ -539,13 +622,11 @@ nav a:hover {
         opacity: 0;
         transform: translateY(30px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
-
 
 @keyframes pulse {
     50% {
@@ -582,7 +663,7 @@ footer p {
     }
 
     .id-stage {
-        margin-top: 100px;
+        margin-top: 90px;
         margin-bottom: 30px;
     }
 
@@ -650,7 +731,6 @@ footer p {
         transition-duration: 0.01ms !important;
     }
 }
-
 
 /* CLICKABLE HOBBY CARDS & GALLERY MODAL */
 

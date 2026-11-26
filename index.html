@@ -46,47 +46,82 @@
 
         </div>
 
-        <!-- DRAGGABLE ID -->
-        <div class="id-stage">
+        <!-- DRAGGABLE & FLIPPABLE ID -->
+        <div class="id-stage" id="idStage">
 
-            <p class="drag-hint">✦ DRAG MY STUDENT CARD ✦</p>
+            <!-- Dynamic Stretching Lanyard anchored at top center -->
+            <div class="lanyard-strap" id="lanyardStrap">
+                <div class="strap-pattern">
+                    <span>VINCE GUILLER • PADAPAT • BSIT • 2026 • VINCE GUILLER • PADAPAT • BSIT • 2026 • VINCE GUILLER • PADAPAT • BSIT • 2026 • VINCE GUILLER • PADAPAT • BSIT • 2026 • VINCE GUILLER • PADAPAT • BSIT • 2026 • </span>
+                </div>
+            </div>
 
             <div class="id-card-wrap" id="draggableCard">
 
-                <div class="lanyard"></div>
-
                 <div class="id-clip"></div>
 
-                <div class="id-card">
+                <div class="id-flipper" id="idFlipper">
 
-                    <div class="id-header">
-                        <span>PERSONAL PROFILE</span>
-                        <span>2026</span>
+                    <!-- FRONT SIDE -->
+                    <div class="id-card id-front">
+
+                        <div class="id-header">
+                            <span>PERSONAL PROFILE</span>
+                            <span>2026</span>
+                        </div>
+
+                        <div class="id-photo">
+                            <img src="profile.png"
+                                 alt="Vince Guiller Padapat"
+                                 draggable="false">
+                        </div>
+
+                        <div class="id-details">
+
+                            <p class="id-label">STUDENT NAME</p>
+
+                            <h3>VINCE GUILLER<br>PADAPAT</h3>
+
+                            <div class="id-line"></div>
+
+                            <p class="id-label">COURSE / SECTION</p>
+
+                            <p class="id-course">
+                                BACHELOR OF SCIENCE IN<br>
+                                INFORMATION TECHNOLOGY
+                            </p>
+
+                            <div class="id-bottom">
+                                <span>2ND YEAR - 2B</span>
+                                <span>STUDENT</span>
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <div class="id-photo">
-                        <img src="profile.png"
-                             alt="Vince Guiller Padapat">
-                    </div>
+                    <!-- BACK SIDE (Swap the image src below to customize!) -->
+                    <div class="id-card id-back">
 
-                    <div class="id-details">
+                        <div class="id-header">
+                            <span>ACCESS PASS // BACK</span>
+                            <span>VINCE.</span>
+                        </div>
 
-                        <p class="id-label">STUDENT NAME</p>
+                        <div class="id-back-image">
+                            <img src="back1.png"
+                                 alt="Vince Back Cover"
+                                 draggable="false">
+                            <div class="id-back-overlay">
+                                <span class="back-badge">BSIT • 2ND YEAR - 2B</span>
+                                <h4>Vince Guiller Padapat</h4>
+                                <p>Noir Portfolio Edition</p>
+                            </div>
+                        </div>
 
-                        <h3>VINCE GUILLER<br>PADAPAT</h3>
-
-                        <div class="id-line"></div>
-
-                        <p class="id-label">COURSE / SECTION</p>
-
-                        <p class="id-course">
-                            BACHELOR OF SCIENCE IN<br>
-                            INFORMATION TECHNOLOGY
-                        </p>
-
-                        <div class="id-bottom">
-                            <span>2ND YEAR - 2B</span>
-                            <span>STUDENT</span>
+                        <div class="id-bottom" style="margin-top: 12px;">
+                            <span>CLICK TO FLIP</span>
+                            <span>2026</span>
                         </div>
 
                     </div>
@@ -94,6 +129,8 @@
                 </div>
 
             </div>
+
+            <p class="drag-hint">✦ DRAG TO PULL • CLICK TO FLIP ✦</p>
 
         </div>
 
@@ -228,9 +265,9 @@
 
         <div class="social-links">
 
-            <a href="https://www.facebook.com/Vinxzu"
+            <a href="https://www.instagram.com/vince.notfound21?avpt=MWs1ajdpeW05c3Z3cg=="
                target="_blank" rel="noopener">
-                Facebook ↗
+                Instagram ↗
             </a>
 
             <a href="https://github.com/VinceNotFound"

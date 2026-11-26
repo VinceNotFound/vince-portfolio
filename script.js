@@ -1,56 +1,123 @@
+// INTERACTIVE PHYSICS LANYARD & FLIPPABLE ID CARD
 
 const card = document.getElementById("draggableCard");
+const strap = document.getElementById("lanyardStrap");
+const flipper = document.getElementById("idFlipper");
 
 let dragging = false;
-let startX = 0;
-let startY = 0;
-let currentX = 0;
-let currentY = 0;
+let hasMoved = false;
+let startMouseX = 0;
+let startMouseY = 0;
 
-card.addEventListener("pointerdown", (e) => {
-    dragging = true;
+let posX = 0;
+let posY = 0;
+let velX = 0;
+let velY = 0;
 
-    card.classList.remove("returning");
-    card.classList.add("dragging");
+// Spring physics parameters
+const stiffness = 0.085;
+const damping = 0.80;
+const restStrapLength = 185; // Matches top:-110px to card top:75px
 
-    startX = e.clientX - currentX;
-    startY = e.clientY - currentY;
+function animateLanyard() {
+    if (!dragging) {
+        // Spring force pulling back to resting short lanyard
+        const forceX = -stiffness * posX;
+        const forceY = -stiffness * posY;
 
-    card.setPointerCapture(e.pointerId);
-});
+        velX = (velX + forceX) * damping;
+        velY = (velY + forceY) * damping;
 
-card.addEventListener("pointermove", (e) => {
-    if (!dragging) return;
+        posX += velX;
+        posY += velY;
 
-    currentX = e.clientX - startX;
-    currentY = e.clientY - startY;
+        if (
+            Math.abs(posX) < 0.05 &&
+            Math.abs(posY) < 0.05 &&
+            Math.abs(velX) < 0.05 &&
+            Math.abs(velY) < 0.05
+        ) {
+            posX = 0;
+            posY = 0;
+            velX = 0;
+            velY = 0;
+        }
+    }
 
-    card.style.setProperty("--drag-x", `${currentX}px`);
-    card.style.setProperty("--drag-y", `${currentY}px`);
-});
+    // Vector from top anchor to card clip (top-center of card)
+    const dx = posX;
+    const dy = restStrapLength + posY;
 
-function returnCard() {
-    if (!dragging) return;
+    // Infinite range stretch & angle calculation
+    const length = Math.max(40, Math.hypot(dx, dy));
+    const angleRad = Math.atan2(dx, dy);
+    const angleDeg = -(angleRad * (180 / Math.PI));
 
-    dragging = false;
-    card.classList.remove("dragging");
-    card.classList.add("returning");
+    if (strap) {
+        strap.style.height = `${length}px`;
+        strap.style.transform = `rotate(${angleDeg}deg)`;
+    }
 
-    currentX = 0;
-    currentY = 0;
+    if (card) {
+        // Since transform-origin is top center, the clip stays locked onto the end of the strap!
+        const dynamicTilt = angleDeg + velX * 0.25;
+        card.style.transform = `translate3d(${posX}px, ${posY}px, 0) rotate(${dynamicTilt}deg)`;
+    }
 
-    card.style.setProperty("--drag-x", "0px");
-    card.style.setProperty("--drag-y", "0px");
+    requestAnimationFrame(animateLanyard);
 }
 
-card.addEventListener("pointerup", returnCard);
-card.addEventListener("pointercancel", returnCard);
+if (card) {
+    card.addEventListener("pointerdown", (e) => {
+        dragging = true;
+        hasMoved = false;
+        card.classList.add("dragging");
 
-card.addEventListener("transitionend", (e) => {
-    if (e.propertyName === "transform") {
-        card.classList.remove("returning");
+        startMouseX = e.clientX - posX;
+        startMouseY = e.clientY - posY;
+        velX = 0;
+        velY = 0;
+
+        card.setPointerCapture(e.pointerId);
+    });
+
+    window.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+
+        const nextX = e.clientX - startMouseX;
+        const nextY = e.clientY - startMouseY;
+
+        if (Math.hypot(nextX - posX, nextY - posY) > 4) {
+            hasMoved = true;
+        }
+
+        velX = (nextX - posX) * 0.45;
+        velY = (nextY - posY) * 0.45;
+
+        posX = nextX;
+        posY = nextY;
+    });
+
+    function releaseCard(e) {
+        if (!dragging) return;
+        dragging = false;
+        card.classList.remove("dragging");
+
+        if (e && e.pointerId !== undefined && card.hasPointerCapture(e.pointerId)) {
+            card.releasePointerCapture(e.pointerId);
+        }
+
+        // Flip card if clicked without dragging
+        if (!hasMoved && flipper) {
+            flipper.classList.toggle("is-flipped");
+        }
     }
-});
+
+    window.addEventListener("pointerup", releaseCard);
+    window.addEventListener("pointercancel", releaseCard);
+
+    requestAnimationFrame(animateLanyard);
+}
 
 
 // MUSIC PLAYER
@@ -71,7 +138,6 @@ async function startAutoplay() {
         await music.play();
         musicStatus.textContent = "Now playing ♪";
     } catch (err) {
-        // Browsers block unmuted audio until first user gesture; unlock on first interaction anywhere
         musicStatus.textContent = "Click anywhere to start ♪";
         const unlockAudio = async () => {
             if (userPaused) return;
@@ -123,19 +189,16 @@ music.addEventListener("pause", () => {
     vinyl.classList.remove("playing");
 });
 
+
 // SCROLL ANIMATIONS
 
 const observer = new IntersectionObserver((entries) => {
-
     entries.forEach((entry) => {
-
         if (entry.isIntersecting) {
             entry.target.classList.add("visible");
             observer.unobserve(entry.target);
         }
-
     });
-
 }, {
     threshold: 0.15
 });
